@@ -1,0 +1,42 @@
+$color-main = #5BD5FF
+
+#app
+  .date-picker.ivu-date-picker
+    .ivu-select-dropdown
+      margin-top -0.1rem
+    .ivu-date-picker-cells-cell-disabled
+      background rgba(0,0,0,0.3)
+  .ivu-select-selection
+    height 100%
+    >div
+      height 100%
+      .ivu-select-selected-value
+        height 100%
+        font-size 1rem
+        font-weight bold
+        line-height 2
+  .ivu-select-selection
+  .ivu-select-dropdown
+    font-size 1rem
+    background-color $cardBg
+    border-radius 0
+    border 0.1rem solid $color-main
+    // color $color-main
+    color $edgeColor
+    padding 0
+    .ivu-picker-panel-body
+      $blur()
+  .ivu-select-arrow
+    color $color-main
+    line-height 2
+    font-size 1rem
+  .ivu-select-item
+  .ivu-dropdown-item
+    font-size 1rem !important
+    text-align center
+    color #fff
+    background rgba(0,0,0,0.8)
+    // &:hover
+    &.ivu-select-item-selected
+      color $edgeColor
+      font-weight bold
