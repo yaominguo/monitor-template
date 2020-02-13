@@ -21,9 +21,9 @@ export default {
 @font-face
   font-family DIN
   src url(./assets/font/DIN-Medium.otf)
-@font-face
-  font-family Microsoft YaHei UI
-  src url(./assets/font/Microsoft-YaHei-UI-Bold.ttf)
+// @font-face
+//   font-family Microsoft YaHei UI
+//   src url(./assets/font/Microsoft-YaHei-UI-Bold.ttf)
 @font-face
   font-family Pangmenzhengdao
   src url(./assets/font/pangmenzhengdao.ttf)
