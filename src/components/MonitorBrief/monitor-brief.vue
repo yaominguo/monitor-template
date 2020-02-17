@@ -1,15 +1,27 @@
 <template>
-  <div class="brief-container">
-    <span class="label">{{label}}</span>
-    <m-count class="count" :value="value"/>
-    <span>{{unit}}</span>
+  <div class="monitor-brief">
+    <img v-if="icon" :src="icon"/>
+    <div>
+      <p class="label" :style="`color:${color}`">{{label}}</p>
+      <count class="count" :style="`font-size:${size}`" :value="value" :decimal="decimal"/>
+      <span v-if="unit">{{unit}}</span>
+    </div>
   </div>
 </template>
 
 <script>
+import count from '../MonitorCount/monitor-count'
 export default {
   name: 'MonitorBrief',
+  components: {
+    count,
+  },
   props: {
+    icon: {},
+    decimal: {
+      type: Number,
+      default: 0,
+    },
     label: {
       type: String,
       default: '',
@@ -21,6 +33,14 @@ export default {
     unit: {
       type: String,
       default: '',
+    },
+    color: {
+      type: String,
+      default: '#fff'
+    },
+    size: {
+      type: String,
+      default: '1.8rem'
     }
   },
   computed: {
@@ -32,14 +52,18 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.brief-container
-  display inline-block
-  color #fff
-  font-size 0.8rem
-  .label
-    color $cardFontColor
-    margin-right 0.5rem
-  .count
-    font-size 1.4rem
-    font-weight bold
+.monitor-brief
+  width 100%
+  display flex
+  align-items center
+  >img
+    width 2.5rem
+    margin-right 1rem
+  >div
+    flex 1
+    .count
+      font-family $font-pang
+      font-size 1.8rem
+    >span
+      font-family $font-pang
 </style>

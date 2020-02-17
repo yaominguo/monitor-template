@@ -105,12 +105,12 @@ export default {
     &.date
       left 20%
       top 50%
-      transform translateY(-60%)
+      transform translateY(-80%)
       cursor pointer
     &.time
       right 13%
       top 50%
-      transform translateY(-60%)
+      transform translateY(-80%)
   img
     position absolute
     width 100%
