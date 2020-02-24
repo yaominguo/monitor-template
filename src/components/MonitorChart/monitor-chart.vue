@@ -1,10 +1,10 @@
 <template>
-  <div class="chart" ref="chart"/>
+  <div class="monitor-chart" ref="chart"/>
 </template>
 
 <script>
 export default {
-  name: 'CommonChart',
+  name: 'MonitorChart',
   props: {
     data: {
       type: Array,
@@ -12,15 +12,10 @@ export default {
         return []
       },
     },
-    showLegend: {
-      type: Boolean,
-      default: true,
-    },
     options: {
       type: Object,
       default() {
         return {
-          colors: null,
           grid: {},
           legend: {},
           tooltip: {},
@@ -29,6 +24,42 @@ export default {
         }
       }
     },
+    config: {
+      type: Object,
+      default() {
+        return {
+          colors: null,
+          legend: {
+            hide: false,
+          },
+          xAxis: {},
+          yAxis: {},
+          tooltip: {},
+        }
+      }
+    },
+  },
+  data() {
+    return {
+      dataSource: [],
+      defaultColors: [
+        '#1890FF',
+        '#41D9C7',
+        '#2FC25B',
+        '#FACC14',
+        '#E6965C',
+        '#223273',
+        '#7564CC',
+        '#8543E0',
+        '#5C8EE6',
+        '#13C2C2',
+        '#5CA3E6',
+        '#3436C7',
+        '#B381E6',
+        '#F04864',
+        '#D598D9',
+      ],
+    }
   },
   mounted() {
     if (this.data.length > 0) {
@@ -37,37 +68,108 @@ export default {
   },
   methods: {
     init() {
+      this.formatData()
       const chart = this.$echarts.init(this.$refs.chart)
-      chart.setOption(this.config)
-    }
-  },
-  computed: {
-    config() {
-      const options = {}
-      const colors = this.options.colors || ['#21640D', '#2F8B14', '#71C012', '#FFCE34', '#F47C1F']
+      chart.setOption(this.setting)
+    },
 
-      options.grid = Object.assign(this.defaultOptions.grid, this.options.grid)
-      options.tooltip = Object.assign(this.defaultOptions.tooltip, this.options.tooltip)
-      if(this.showLegend) {
-        options.legend = Object.assign(this.defaultOptions.legend, this.options.legend)
-        if (this.options.series.type === 'pie') {
-          options.color = this.options.color || colors
-          options.series = [this.options.series]
-          options.series[0].data = options.legend.data = this.data
-          return options
-        }
-        options.legend.data = this.data.map(item => item.name)
-      }
-      options.xAxis = Object.assign(this.defaultOptions.xAxis, this.options.xAxis)
-      if(Array.isArray(this.options.yAxis) && this.options.yAxis.length > 0) {
-        options.yAxis = this.options.yAxis.map((item, index) => {
-          return Object.assign(this.defaultOptions.yAxis, item)
+    /** 转换数据格式 */
+    formatData() {
+      this.dataSource = this.config.shape.map(item => {
+        const values = []
+        this.data.forEach(e => {
+          values.push(e[item.key])
         })
-      } else {
-        options.yAxis = Object.assign(this.defaultOptions.yAxis, this.options.yAxis || {})
+        return {name: item.name, data: values}
+      })
+    },
+
+    /** 设置坐标轴 */
+    setAxis(options) {
+      const {xAxis, yAxis, shape} = this.config
+      const config = {
+        data: this.data.map(item => item[(yAxis && yAxis.key) || xAxis.key]),
+        boundaryGap: !this.config.shape.every(item => item.type === 'line')
       }
-      options.series = this.data.map((item, index) => {
-        let color = colors[index]
+      options.xAxis = Object.assign({}, this.defaultOptions.xAxis, config, this.options.xAxis)
+
+      // 如果shape选项中有yAxisIndex字段则变为双Y轴
+      if (shape.some(item => item.hasOwnProperty('yAxisIndex'))) {
+        // 双y轴设置一样的间隔
+        const y1 = [], y2 = []
+        shape.forEach((el, i) => {
+          if (el.yAxisIndex) {
+            y2.push(...this.dataSource[i].data)
+          } else {
+            y1.push(...this.dataSource[i].data)
+          }
+        })
+        const y1Max = Math.max.apply(null, y1)
+        const y2Max = Math.max.apply(null, y2)
+        options.yAxis = [
+          Object.assign({}, this.defaultOptions.yAxis, {min:0, max: y1Max, interval: y1Max / 5}),
+          Object.assign({}, this.defaultOptions.yAxis, {min:0, max: y2Max, interval: y2Max / 5}),
+        ]
+      } else {
+        options.yAxis = Object.assign({}, this.defaultOptions.yAxis, yAxis)
+      }
+
+      // 如果key在yAxis上则x、y轴对调
+      if (yAxis && yAxis.key) {
+        const x = options.xAxis
+        const y = options.yAxis
+        options.yAxis = x
+        options.xAxis = y
+      }
+    },
+
+    /** 设置图例说明 */
+    setLegend(options) {
+      const {legend} = this.config
+      if (legend.hide) {
+        options.grid.top = '5%'
+        return
+      }
+      options.legend = Object.assign({}, this.defaultOptions.legend, this.options.legend)
+      if (legend.orient) {
+        options.legend.orient = legend.orient
+      }
+      options.legend.data = this.dataSource.map(item => item.name)
+      switch (legend.align) {
+      case 'left':
+        options.legend.left = '5%'
+        break
+      case 'right':
+        options.legend.right = '5%'
+        break
+      default:
+        break
+      }
+    },
+
+    /** 绘制图形 */
+    setSeries(options) {
+      const {shape} = this.config
+      // 如果为饼图则数据需是[{name: 'name', value: 1}]格式，且不需要坐标轴
+      if (shape[0].type === 'pie') {
+        options.color = this.colors
+        options.series = [{
+          label: {
+            normal: {
+              show: false,
+            },
+          },
+          ...shape[0],
+        }]
+        options.series[0].data = options.legend.data = this.data
+        options.tooltip.trigger = 'item'
+        this.$delete(options, 'xAxis')
+        this.$delete(options, 'yAxis')
+        return
+      }
+
+      options.series = shape.map((item, index) => {
+        let color = this.colors[index]
         let shadow = {}
         if (Array.isArray(color)) { // 如果颜色是数组则渐变
           const shadowColor = color[0] || '#0076FF'
@@ -81,50 +183,45 @@ export default {
           }
         }
         const result = {
-          name: item.name,
           barWidth: '50%',
+          smooth: true,
+          symbol: 'circle',
           itemStyle: { color, ...shadow },
-          data: item.data || []
-        }
-        if (Array.isArray(this.options.series) && this.options.series.length > 0) {
-          // 双y轴设置一样的间隔
-          const y1 = [], y2 = []
-          this.options.series.forEach((el, i) => {
-            if (el.yAxisIndex) {
-              y2.push(...this.data[i].data)
-            } else {
-              y1.push(...this.data[i].data)
-            }
-            const y1Max = Math.max.apply(null, y1)
-            const y2Max = Math.max.apply(null, y2)
-            options.yAxis[0] = Object.assign({...options.yAxis[0]}, {min:0, max: y1Max, interval:y1Max / 5})
-            options.yAxis[1] = Object.assign({...options.yAxis[1]}, {min:0, max: y2Max, interval:y2Max / 5})
-          })
-          return Object.assign(result, this.options.series[index])
-        } else {
-          return Object.assign(result, this.options.series || {})
+          data: this.dataSource[index].data || [],
+          ...item,
         }
         return result
       })
+    },
+  },
+  computed: {
+    colors() {
+      return this.config.colors || this.defaultColors
+    },
+    setting() {
+      const options = {}
+      options.grid = Object.assign({}, this.defaultOptions.grid, this.options.grid)
+      options.tooltip = Object.assign({}, this.defaultOptions.tooltip, this.config.tooltip)
+      this.setAxis(options)
+      this.setLegend(options)
+      this.setSeries(options)
       return options
     },
     defaultOptions() {
       return {
         grid: {
-          top: '25%',
-          left: '3%',
-          right: '3%',
-          bottom: '5px',
+          top: '15%',
+          left: 'auto',
+          right: '5%',
+          bottom: '10%',
           width: 'auto',
           height: 'auto',
           containLabel: true,
         },
         legend: {
-          top: '5%',
-          left: '6%',
           width: '100%',
           data: [],
-          itemWidth: 15,
+          itemWidth: this.fontSize * 1.5,
           textStyle: {
             color: '#ccc',
             fontSize: this.fontSize,
@@ -134,7 +231,9 @@ export default {
           trigger: 'axis',
           axisPointer: {
             type: 'shadow'
-          }
+          },
+          confine: true,
+          extraCssText: 'z-index: 999',
         },
         xAxis: {
           type: 'category',
@@ -184,7 +283,6 @@ export default {
       }
     },
     fontSize() {
-      // return Math.floor(window.innerWidth / 100) - 1
       return Math.floor(screen.height * 1.48 / 100)
     },
   },
@@ -199,7 +297,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .chart
-    height 100%
-    width 100%
+.monitor-chart
+  height 100%
+  width 100%
 </style>
