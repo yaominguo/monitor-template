@@ -17,6 +17,10 @@ export default {
       type: String,
       default: 'http://www.962121.net/hmfmstest/shanghaiwuye/web/dataV/propertyinspector/static/icons/',
     },
+    mapJs: {
+      type: String,
+      default: 'http://www.962121.net/gis_system/smimap/mapdebug/ShsmiGis.Bridge.js',
+    },
   },
   data() {
     return {
@@ -29,17 +33,15 @@ export default {
   methods: {
     inject() {
       return new Promise((resolve, reject) => {
-        const jquery = document.createElement('script')
-        jquery.type = 'text/javascript'
-        jquery.src = 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
-
+        if (document.getElementById('_mapjs')) {
+          resolve()
+          return
+        }
         const mapjs = document.createElement('script')
         mapjs.type = 'text/javascript'
-        mapjs.src = 'http://www.962121.net/gis_system/smimap/mapdebug/ShsmiGis.Bridge.js'
-
-        document.head.appendChild(jquery)
+        mapjs.src = this.mapJs
+        mapjs.setAttribute('id', '_mapjs')
         document.head.appendChild(mapjs)
-
         window.onload = () => resolve()
       })
     },
@@ -50,6 +52,7 @@ export default {
         url: this.mapUrl,
         onReady: () => {
           // console.log('地图创建完成')
+          this.$emit('complete')
           this.addListener()
         }
       })
@@ -78,10 +81,10 @@ export default {
      * @param {String} icon [可选 - icon名称]
      * @param {Number} size [可选 - icon的大小（默认20）]
      */
-    addPoint({name, mode = 'add', key, data, labelKey = null, icon = 'test.png', size = 20}) {
+    addPoint({name, mode = 'add', key, data, labelKey = null, icon = 'test.png', size = 20, color}) {
       if (!this.map) return
       this.removePoint(name)
-      const params = this.getMapParams({data, key, labelKey, icon, size})
+      const params = this.getMapParams({data, key, labelKey, icon, size, color})
       params.name = name
       params.mode = mode
       this.map.Invoke({
@@ -112,8 +115,9 @@ export default {
      * @param {String} labelKey [可选 - 传入则显示标签，取哪个值则传哪个值的key]
      * @param {String} icon [可选 - icon名称]
      * @param {Number} size [可选 - icon的大小（默认20）]
+     * @param {String} color [可选 - 标签颜色（默认'#47B3FF'）]
      */
-    getMapParams({data = [], key, labelKey, icon, size}) {
+    getMapParams({data = [], key, labelKey, icon, size, color = '#47B3FF'}) {
       const dataArray = []
       const uniqueValueInfos = []
       const fieldJsonArray = []
@@ -133,8 +137,8 @@ export default {
       }
       data.forEach(item => {
         const array = {
-          codX: item.X,
-          codY: item.Y,
+          codX: item.X || item.x,
+          codY: item.Y || item.y,
           codZ: 0,
           attrs: {
             ...item,
@@ -154,7 +158,7 @@ export default {
                 type: 'icon',
                 size,
                 resource: {
-                  href: api.MAP_ICON_BASE + (item.icon || icon),
+                  href: this.iconUrl + (item.icon || icon),
                 },
               },
             ]
@@ -176,7 +180,7 @@ export default {
         labelsymbol: {
           symbol: {
             type: 'text',
-            color: '#47B3FF',
+            color: color,
             // color: '#00f2ff',
             haloSize: 0,
             haloColor: 'white',
@@ -207,7 +211,7 @@ export default {
           return {
             name: labelKey ? item[labelKey] : null,
             value: size,
-            corrd: [item.X, item.Y],
+            corrd: [item.X || item.x, item.Y || item.y],
             color: color,
           }
         }),
@@ -241,8 +245,11 @@ export default {
      * @param {String} y [必填 - y坐标]
      * @param {Number} zoom [可选 - 放大比例（默认为6）]
      */
-    gotoPosition(x, y, zoom = 6) {
-      if (!this.map || !x || !y ) return
+    focus(x, y, zoom = 6) {
+      if (!this.map || !x || !y ) {
+        console.error('传入的坐标点不能为空')
+        return
+      }
       const params = {
         codX: x,
         codY: y,

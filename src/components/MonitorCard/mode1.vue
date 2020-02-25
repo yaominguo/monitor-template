@@ -46,4 +46,6 @@ export default {
       flex 1
       background $edgeColor
       opacity 0.3
+  .card-content
+    padding 0.5rem 1rem
 </style>
