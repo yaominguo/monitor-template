@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import echarts from 'echarts'
 export default {
   name: 'MonitorChart',
   props: {
@@ -69,7 +70,7 @@ export default {
   methods: {
     init() {
       this.formatData()
-      const chart = this.$echarts.init(this.$refs.chart)
+      const chart = echarts.init(this.$refs.chart)
       chart.setOption(this.setting)
     },
 
@@ -173,7 +174,7 @@ export default {
         let shadow = {}
         if (Array.isArray(color)) { // 如果颜色是数组则渐变
           const shadowColor = color[0] || '#0076FF'
-          color = new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: color[0]},
             {offset: 1, color: color[1]}
           ])
@@ -184,6 +185,7 @@ export default {
         }
         const result = {
           barWidth: '50%',
+          barGap: 0,
           smooth: true,
           symbol: 'circle',
           itemStyle: { color, ...shadow },

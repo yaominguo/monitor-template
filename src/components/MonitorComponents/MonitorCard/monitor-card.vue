@@ -1,11 +1,11 @@
 <template>
-<m-trans :enter="enter" :leave="leave">
+<m-animate :enter="enter" :leave="leave">
   <div class="monitor-card">
     <component :is="card" v-bind="$attrs">
       <slot/>
     </component>
   </div>
-</m-trans>
+</m-animate>
 </template>
 
 <script>

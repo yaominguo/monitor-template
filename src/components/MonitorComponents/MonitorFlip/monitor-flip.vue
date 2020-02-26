@@ -2,6 +2,7 @@
   <IOdometer
     class="monitor-flip"
     :value="num"
+    :style="style"
   />
 </template>
 
@@ -17,6 +18,14 @@ export default {
       type: Number,
       default: 0,
     },
+    color: {
+      type: String,
+      default: '#fff',
+    },
+    size: {
+      type: String,
+      default: '1rem',
+    },
   },
   data() {
     return {
@@ -27,6 +36,11 @@ export default {
     this.$nextTick(() => {
       this.num = this.value
     })
+  },
+  computed: {
+    style() {
+      return {color: this.color, fontSize: this.size}
+    }
   },
 }
 </script>

@@ -4,6 +4,7 @@
   :endVal="value"
   :options="config"
   @ready="onReady"
+  :style="style"
   />
 </template>
 
@@ -26,6 +27,22 @@ export default {
     decimal: { // 默认保留2位小数点
       type: Number,
       default: 2,
+    },
+    prefix: {
+      type: String,
+      default: '',
+    },
+    suffix: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String,
+      default: '1rem',
+    },
+    color: {
+      type: String,
+      default: '#fff',
     },
     options: {
       type: Object,
@@ -51,8 +68,11 @@ export default {
   },
   computed: {
     config() {
-      return Object.assign(this.options, {decimalPlaces: this.decimal})
-    }
+      return Object.assign(this.options, {decimalPlaces: this.decimal, prefix: this.prefix, suffix: this.suffix})
+    },
+    style() {
+      return {color: this.color, fontSize: this.size}
+    },
   },
   methods: {
     onReady(instance, countup) {

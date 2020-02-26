@@ -1,5 +1,5 @@
 <template>
-<m-trans enter="fadeInRight" leave="fadeOutRight">
+<m-animate :enter="enter" :leave="leave">
   <div v-if="value" class="monitor-drawer" style="animation-duration: 500ms">
     <img @click="handleClose" class="close-btn" src="@/assets/images/title-arrow.png"/>
     <img class="border left" src="@/assets/images/modal-right.png"/>
@@ -10,7 +10,7 @@
     </div>
     <img class="border right" src="@/assets/images/modal-right.png"/>
   </div>
-</m-trans>
+</m-animate>
 </template>
 
 <script>
@@ -24,7 +24,15 @@ export default {
     width: {
       type: String,
       default: '40%',
-    }
+    },
+    enter: {
+      type: String,
+      default: 'fadeInRight',
+    },
+    leave: {
+      type: String,
+      default: 'fadeOutRight',
+    },
   },
   methods: {
     handleClose() {

@@ -57,7 +57,7 @@ export default {
   display flex
   align-items center
   >img
-    width 2.5rem
+    width 2.8rem
     margin-right 1rem
   >div
     flex 1

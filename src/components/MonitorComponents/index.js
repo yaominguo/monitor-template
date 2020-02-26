@@ -1,0 +1,36 @@
+import animate from 'animate.css'
+import MonitorAnimate from './MonitorAnimate/monitor-animate'
+const MonitorBrief = () => import('./MonitorBrief/monitor-brief')
+const MonitorCard = () => import('./MonitorCard/monitor-card')
+const MonitorChart = () => import('./MonitorChart/monitor-chart')
+const MonitorCount = () => import('./MonitorCount/monitor-count')
+const MonitorDrawer = () => import('./MonitorDrawer/monitor-drawer')
+const MonitorFlip = () => import('./MonitorFlip/monitor-flip')
+const MonitorForm = () => import('./MonitorForm/monitor-form')
+const MonitorGrid = () => import('./MonitorGrid/monitor-grid')
+const MonitorLoader = () => import('./MonitorLoader/monitor-loader')
+const MonitorMap = () => import('./MonitorMap/monitor-map')
+const MonitorModal = () => import('./MonitorModal/monitor-modal')
+const MonitorProgress = () => import('./MonitorProgress/monitor-progress')
+const MonitorTable = () => import('./MonitorTable/monitor-table')
+const MonitorTitle = () => import('./MonitorTitle/monitor-title')
+
+
+export default (Vue) => {
+  Vue.use(animate)
+  Vue.component('m-animate', MonitorAnimate)
+  Vue.component('m-brief', MonitorBrief)
+  Vue.component('m-card', MonitorCard)
+  Vue.component('m-chart', MonitorChart)
+  Vue.component('m-count', MonitorCount)
+  Vue.component('m-drawer', MonitorDrawer)
+  Vue.component('m-flip', MonitorFlip)
+  Vue.component('m-form', MonitorForm)
+  Vue.component('m-grid', MonitorGrid)
+  Vue.component('m-loader', MonitorLoader)
+  Vue.component('m-map', MonitorMap)
+  Vue.component('m-modal', MonitorModal)
+  Vue.component('m-progress', MonitorProgress)
+  Vue.component('m-table', MonitorTable)
+  Vue.component('m-title', MonitorTitle)
+}

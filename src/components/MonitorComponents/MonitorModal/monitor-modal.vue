@@ -1,5 +1,5 @@
 <template>
-<m-trans enter="zoomInUp" leave="zoomOutDown">
+<m-animate :enter="enter" :leave="leave">
   <div v-if="value" class="monitor-modal">
     <div :style="`width:${width}`">
       <img @click="handleClose" class="close-btn" src="@/assets/images/modal-close.png"/>
@@ -12,7 +12,7 @@
       <img class="border bottom" src="@/assets/images/modal-bottom.png"/>
     </div>
   </div>
-</m-trans>
+</m-animate>
 </template>
 
 <script>
@@ -25,7 +25,15 @@ export default {
     },
     width: {
       type: String,
-      default: '80%',
+      default: '40%',
+    },
+    enter: {
+      type: String,
+      default: 'zoomInUp',
+    },
+    leave: {
+      type: String,
+      default: 'zoomOutDown',
     }
   },
   methods: {
@@ -51,7 +59,7 @@ export default {
   z-index 1000
   >div
     position relative
-    padding 1rem 0
+    padding 2% 0
     background $color-map(0.1)
     color #ccc
     .content
@@ -69,6 +77,7 @@ export default {
         cursor pointer
       &.border
         width 103%
+        height 15%
         left -1.5%
         &.top
           top -1rem

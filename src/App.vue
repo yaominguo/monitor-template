@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <loader v-show="$store.state.showLoading"/>
+    <m-loader v-show="$store.state.showLoading"/>
     <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
 <script>
-import loader from '@/components/MonitorLoader/monitor-loader'
 export default {
   name: 'App',
-  components: {
-    loader,
-  }
 }
 </script>
 
