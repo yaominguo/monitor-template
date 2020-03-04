@@ -90,10 +90,13 @@ export default {
       const {xAxis, yAxis, shape} = this.config
       const config = {
         data: this.data.map(item => item[(yAxis && yAxis.key) || xAxis.key]),
-        boundaryGap: !this.config.shape.every(item => item.type === 'line')
+        boundaryGap: !shape.every(item => item.type === 'line')
       }
       options.xAxis = Object.assign({}, this.defaultOptions.xAxis, config, this.options.xAxis)
-
+      //如果是折线图则用线型的tooltip
+      if (shape.some(item => item.type === 'line')) {
+        options.tooltip.axisPointer.type = 'line'
+      }
       // 如果shape选项中有yAxisIndex字段则变为双Y轴
       if (shape.some(item => item.hasOwnProperty('yAxisIndex'))) {
         // 双y轴设置一样的间隔
