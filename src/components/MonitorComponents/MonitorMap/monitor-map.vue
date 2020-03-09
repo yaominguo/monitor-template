@@ -125,16 +125,14 @@ export default {
         fieldJsonArray.push({
           name: e,
           alias: e,
-          type: 'string',
+          type: 'string'
         })
       }
-      if (labelKey) {
-        fieldJsonArray.push({
-          name: 'name',
-          alias: '标签',
-          type: 'string',
-        })
-      }
+      fieldJsonArray.push({
+        name: 'name',
+        alias: '标签',
+        type: 'string',
+      })
       data.forEach(item => {
         const array = {
           codX: item.X || item.x,
@@ -146,11 +144,13 @@ export default {
         }
         if (labelKey) {
           array.attrs.name = item[labelKey]
+        } else {
+          array.attrs.name = ''
         }
         dataArray.push(array)
         uniqueValueInfos.push({
           value: item[key],
-          label: item[labelKey] || item[key],
+          label: (item[labelKey] || item[key]) + '',
           symbol: {
             type: 'point-3d',
             symbolLayers: [

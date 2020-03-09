@@ -117,6 +117,7 @@ export default {
     height 100%
     top 0
     left 0
+    animation shine 2.5s linear reverse infinite
   >p
     text-shadow 0 0.2rem 0.4rem #25e7f6
     background-clip text
@@ -124,4 +125,15 @@ export default {
     color #25e7f6
     -webkit-text-fill-color transparent
     background-image linear-gradient(to bottom, #fff, #25e7f6)
+@keyframes shine {
+  0% {
+    opacity 1
+  }
+  50% {
+    opacity 0.7
+  }
+  100% {
+    opacity 1
+  }
+}
 </style>
