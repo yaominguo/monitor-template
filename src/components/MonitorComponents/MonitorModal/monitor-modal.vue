@@ -64,10 +64,12 @@ export default {
     color #ccc
     .content
       min-height 30vh
-      max-height 70vh
+      max-height 60vh
       padding 0 1rem
       overflow-y auto
       overflow-x hidden
+      >div
+        $blur()
     >img
       position absolute
       &.close-btn
@@ -77,7 +79,7 @@ export default {
         cursor pointer
       &.border
         width 103%
-        height 15%
+        height 10%
         left -1.5%
         &.top
           top -1rem

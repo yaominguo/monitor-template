@@ -266,7 +266,7 @@ export default {
      */
     zoomIn() {
       this.map.Invoke({
-        Action: 'mapzoom',
+        ActionName: 'mapzoom',
         Parameters: {
           'zoommode': 'zoomin',
         }
@@ -278,7 +278,7 @@ export default {
      */
     zoomOut() {
       this.map.Invoke({
-        Action: 'mapzoom',
+        ActionName: 'mapzoom',
         Parameters: {
           'zoommode': 'zoomout',
         }

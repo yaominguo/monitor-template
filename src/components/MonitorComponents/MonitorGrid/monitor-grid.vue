@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="monitor-grid" ref="grid" :style="style">
+  <div class="monitor-grid" ref="grid" :style="style">
     <slot />
   </div>
 </template>
@@ -24,44 +24,19 @@ export default {
     bgImg: {
       type: String,
     },
-    ready: {
-      type: Boolean,
-      default: true,
-    }
   },
   data() {
     return {
       style: {},
-      show: false,
     }
   },
   mounted() {
-    this.$nextTick(this.init)
+    this.$nextTick(() => {
+      setTimeout(this.init, 0)
+    })
   },
   methods: {
     init() {
-      this.show = true
-      const children = this.$refs.grid.children
-      for(let i = 0; i < children.length; i++) {
-        const child = children[i]
-        const area = child.getAttribute('area')
-        if (area) {
-          child.style.gridArea = area
-        }
-        if (child.getAttribute('id') !== 'map') {
-          if (this.ready) {
-            child.style.opacity = 1
-            child.style.transform = 'scale(1)'
-          } else {
-            child.style.opacity = 0
-            child.style.transform = 'scale(2)'
-            child.style.transition = 'opacity 1s, transform 1s'
-          }
-        }
-      }
-      this.setUp()
-    },
-    setUp() {
       let templateAreas = this.template
       if (Array.isArray(templateAreas)) {
         let result = ''
@@ -78,15 +53,17 @@ export default {
         'padding': this.gap,
         'background-image': `url(${this.bgImg})`
       }
-    }
-  },
-  watch: {
-    ready(cur, past) {
-      if (cur !== past) {
-        this.init()
+
+      const children = this.$refs.grid.children
+      for(let i = 0; i < children.length; i++) {
+        const child = children[i]
+        const area = child.getAttribute('area')
+        if (area) {
+          child.style.gridArea = area
+        }
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
