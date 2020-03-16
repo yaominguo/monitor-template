@@ -45,6 +45,9 @@
         </Row>
       </div>
     </template>
+    <div v-else class="no-data">
+      — 暂无数据 —
+    </div>
     <m-modal v-model="showImg">
       <img v-if="showImg" style="width: 100%;" :src="$api.IMG_URL + curSrc"/>
     </m-modal>
@@ -96,6 +99,9 @@ export default {
   font-size 1rem
   color #fff
   margin-bottom 1rem
+  .no-data
+    text-align center
+    margin-top 0.5rem
   .title
     font-size 1.2rem
     font-weight bold

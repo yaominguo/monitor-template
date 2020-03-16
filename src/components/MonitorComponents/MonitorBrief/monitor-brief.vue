@@ -1,9 +1,9 @@
 <template>
   <div class="monitor-brief">
-    <img v-if="icon" :src="icon"/>
+    <img v-if="icon" :src="icon" draggable="false"/>
     <div>
-      <p class="label" :style="`color:${color}`">{{label}}</p>
-      <count class="count" :style="`font-size:${size}`" :value="value" :decimal="decimal"/>
+      <p class="label" :style="`color:${labelColor}`">{{label}}</p>
+      <count class="count" :style="`font-size:${size};color:${countColor}`" :value="value" :decimal="decimal"/>
       <span v-if="unit">{{unit}}</span>
     </div>
   </div>
@@ -34,7 +34,11 @@ export default {
       type: String,
       default: '',
     },
-    color: {
+    labelColor: {
+      type: String,
+      default: '#fff'
+    },
+    countColor: {
       type: String,
       default: '#fff'
     },
