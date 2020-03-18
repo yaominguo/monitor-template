@@ -33,6 +33,6 @@
 
 <script>
 export default {
-  name: 'Test',
+  name: 'Main',
 }
 </script>

@@ -88,6 +88,7 @@ export default {
     /** 设置坐标轴 */
     setAxis(options) {
       const {xAxis, yAxis, shape} = this.config
+      if (shape[0].type === 'pie' || shape[0].type === 'donut') return
       const config = {
         data: this.data.map(item => item[(yAxis && yAxis.key) || xAxis.key]),
         boundaryGap: !shape.every(item => item.type === 'line')
@@ -130,16 +131,16 @@ export default {
     /** 设置图例说明 */
     setLegend(options) {
       const {legend} = this.config
-      if (legend.hide) {
+      if (legend && legend.hide) {
         options.grid.top = '5%'
         return
       }
       options.legend = Object.assign({}, this.defaultOptions.legend, this.options.legend)
-      if (legend.orient) {
+      if (legend && legend.orient) {
         options.legend.orient = legend.orient
       }
       options.legend.data = this.dataSource.map(item => item.name)
-      switch (legend.align) {
+      switch (legend && legend.align) {
       case 'left':
         options.legend.left = '5%'
         break
@@ -156,19 +157,11 @@ export default {
       const {shape} = this.config
       // 如果为饼图则数据需是[{name: 'name', value: 1}]格式，且不需要坐标轴
       if (shape[0].type === 'pie') {
-        options.color = this.colors
-        options.series = [{
-          label: {
-            normal: {
-              show: false,
-            },
-          },
-          ...shape[0],
-        }]
-        options.series[0].data = options.legend.data = this.data
-        options.tooltip.trigger = 'item'
-        this.$delete(options, 'xAxis')
-        this.$delete(options, 'yAxis')
+        this.setPie(options)
+        return
+      }
+      if (shape[0].type === 'donut') {
+        this.setDonut(options)
         return
       }
 
@@ -196,6 +189,90 @@ export default {
           ...item,
         }
         return result
+      })
+    },
+
+    // 绘制饼图
+    setPie(options) {
+      const {shape} = this.config
+      options.color = this.colors
+      options.series = [{
+        label: {
+          normal: {
+            show: false,
+          },
+        },
+        ...shape[0],
+      }]
+      if (options.legend && options.legend.data) {
+        options.series[0].data = options.legend.data = this.data
+      } else {
+        options.series[0].data = this.data
+      }
+      options.tooltip.trigger = 'item'
+      this.$delete(options, 'xAxis')
+      this.$delete(options, 'yAxis')
+    },
+
+    // 绘制同心圆图
+    setDonut(options) {
+      const {shape} = this.config
+      options.color = this.colors
+      options.series = this.getDonutConfig(shape)
+    },
+
+    getDonutConfig(args) {
+      const len = args.length
+      if (len <= 0 ) return
+      const total = this.data.reduce((acc, cur) => { // 计算数据的value总和
+        return acc + cur.value
+      }, 0)
+
+      return args.map((e, i) => {
+        const rate = Math.round((len - i) * this.fontSize)
+        let borderColor = this.colors[i]
+        if(Array.isArray(borderColor)) {
+          borderColor = {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+                offset: 0, color: borderColor[0] // 0% 处的颜色
+            }, {
+                offset: 1, color: borderColor[1] // 100% 处的颜色
+            }],
+            global: false, // 缺省为 false
+          }
+        }
+        return {
+          type: 'pie',
+          name: e.name,
+          clockWise: false, //顺时加载
+          hoverAnimation: false, //鼠标移入变大
+          radius: [rate, rate + 1],
+          itemStyle: {
+            normal: {
+              label: {
+                show: false,
+              },
+              labelLine: {
+                show: false,
+              },
+              borderWidth: this.borderWidth,
+              borderColor: borderColor,
+            }
+          },
+          data: [
+            this.data[i],
+            {
+              value: Math.round(total - this.data[i].value),
+              name: '',
+              itemStyle: this.blackStyle,
+            }
+          ]
+        }
       })
     },
   },
@@ -289,6 +366,24 @@ export default {
     },
     fontSize() {
       return Math.floor(screen.height * 1.48 / 100)
+    },
+    borderWidth() {
+      return this.fontSize * 0.6
+    },
+    blackStyle() {
+      return {
+        normal: {
+          label: {
+            show: false,
+          },
+          labelLine: {
+            show: false
+          },
+          color: 'transparent',
+          borderColor: 'rgba(0,0,0,0.1)',
+          borderWidth: this.borderWidth,
+        },
+      }
     },
   },
   watch: {

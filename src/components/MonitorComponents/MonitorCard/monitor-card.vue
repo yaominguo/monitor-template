@@ -1,7 +1,7 @@
 <template>
 <m-animate :enter="enter" :leave="leave">
   <div class="monitor-card">
-    <component :is="card" v-bind="$attrs">
+    <component :is="card" v-bind="$attrs" :title="title">
       <slot/>
     </component>
   </div>
@@ -12,6 +12,9 @@
 export default {
   name: 'MonitorCard',
   props: {
+    title: {
+      type: String,
+    },
     mode: {
       type: [String, Number],
       default: '1',
