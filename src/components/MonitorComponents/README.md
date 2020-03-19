@@ -1,4 +1,22 @@
 
+# Dataview-Cli
+A command line tool to generate a dataview project.
+
+
+## How to start
+
+```bash
+#if you have npx, you can just run
+npx dataview init [name]
+
+#else, you need to install first
+npm install @omniview/dataview-cli -g
+
+#and then call with
+dataview init [name]
+```
+___
+
 # 组件使用方法
 
 > ## m-grid
@@ -9,6 +27,7 @@ columns|列比例|String
 rows|行比例|String
 gap|间距|String
 bgImg|背景图片src|String
+complete|(可选)默认为true，传入false则启动loading图，待地图加载后再置为true|Boolean
 ```html
 <m-grid
   :template="[
@@ -45,7 +64,7 @@ ___
 > ## m-card
 参数|说明|类型
 -|-|-
-mode|容器的类型，目前有3中，默认为'1'|[String, Number]
+mode|容器的类型，目前有4种，默认为'1'|[String, Number]
 title|容器标题，默认为‘标题’|String
 color|标题颜色|String
 enter|容器的进入动画，默认为fadeInRight|String
@@ -131,6 +150,28 @@ ___
 steps|步骤列表|Array[Object]
 -|name:节点名称|String
 current|当前进度节点|[Number, String]
+msg|(可选)其他信息，显示在节点下方|Array[String]
+
+```html
+<m-step :steps="[{name: '报警'},{name: '通知'},{name: '处置完成'}]" :current="1"/>
+```
+---
+>## m-scroll
+
+参数|说明|类型
+-|-|-
+length|数据长度|Number
+limit|临界点，大于此值则滚动，默认为6|Number
+duration|间隔时间，默认为3000|Number
+mode|默认为1，即向上滚动。2为不断将第一个元素高度置为0|[Number, String]
+
+```html
+<m-scroll :length="10" mode="2">
+  <div v-for="i in 10" :key="i" style="height: 5rem;margin-bottom:0.5rem;">
+    {{i}}
+  </div>
+</m-scroll>
+```
 ___
 > ## m-map
 

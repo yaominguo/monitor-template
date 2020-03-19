@@ -52,4 +52,5 @@ $size()
     .card-content
       height calc(100% - 2rem)
       overflow-y auto
+      overflow-x hidden
 </style>

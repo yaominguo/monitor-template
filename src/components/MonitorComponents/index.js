@@ -15,6 +15,7 @@ const MonitorProgress = () => import('./MonitorProgress/monitor-progress')
 const MonitorTable = () => import('./MonitorTable/monitor-table')
 const MonitorTitle = () => import('./MonitorTitle/monitor-title')
 const MonitorStep = () => import('./MonitorStep/monitor-step')
+const MonitorScroll = () => import('./MonitorScroll/monitor-scroll')
 
 
 export default (Vue) => {
@@ -35,4 +36,5 @@ export default (Vue) => {
   Vue.component('m-table', MonitorTable)
   Vue.component('m-title', MonitorTitle)
   Vue.component('m-step', MonitorStep)
+  Vue.component('m-scroll', MonitorScroll)
 }

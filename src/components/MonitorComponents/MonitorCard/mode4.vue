@@ -1,10 +1,10 @@
 <template>
 <div class="card-wrapper">
-  <div v-if="!hideTitle" class="card-title" :style="`color:${color}`">
+  <div class="card-title" :style="`color:${color};background-image:url(${require('@/assets/images/mode4-bg.png')})`">
     <img v-if="icon" :src="icon"/>
     {{title}}
   </div>
-  <div class="card-content" :style="contentStyle">
+  <div class="card-content">
     <slot />
   </div>
 </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'Mode3',
+  name: 'Mode4',
   props: {
     icon: {},
     title: {
@@ -22,19 +22,6 @@ export default {
     color: {
       type: String,
     },
-    hideTitle: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    contentStyle() {
-      if (!this.hideTitle) return {}
-      return {
-        'height': '100%',
-        'overflow-y': 'hidden',
-      }
-    }
   },
 }
 </script>
@@ -46,16 +33,18 @@ export default {
     display flex
     align-items center
     color #fff
-    font-size 1.4rem
+    font-size 1.2rem
     font-weight bold
-    background $cardBg
-    margin-bottom 0.5rem
     height 3rem
-    padding 0 1rem
+    padding 0 0.5rem
+    background-size 90% 70%
+    background-position left center
+    background-repeat no-repeat
+    background-color #063a6f
     >img
       width 1.4rem
-      margin-right 1rem
+      margin-right 0.5rem
   .card-content
-    background $cardBg
+    background #052749
     padding 1rem
 </style>

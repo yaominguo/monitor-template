@@ -1,5 +1,5 @@
 <template>
-  <div class="monitor-loader">
+  <div class="monitor-loader" :style="`background:${bgColor}`">
     <div class="loader">
       <div class="outer"/>
       <div class="inner"/>
@@ -15,7 +15,11 @@ export default {
     msg: {
       type: String,
       default: '加载中 . . .',
-    }
+    },
+    bgColor: {
+      type: String,
+      default: 'rgba(0,0,0,0.3)',
+    },
   }
 }
 </script>
@@ -27,13 +31,13 @@ export default {
   left 0
   bottom 0
   right 0
-  background rgba(0,0,0,0.3)
   z-index 9999
   display flex
   align-items center
   justify-content center
   .loader
     position relative
+    z-index 8888
     .msg
       display block
       color #fff
