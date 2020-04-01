@@ -32,13 +32,17 @@ export default {
       },
     }
   },
+  data() {
+    return {
+      setTop: null,
+    }
+  },
+  mounted() {
+     this.$nextTick(() => {
+      this.setTop = {top: `calc(${this.$refs.icon[0].offsetTop}px + 0.35rem)`}
+    })
+  },
   computed: {
-    setTop() {
-      if (this.msg.length > 0) {
-        return {top: '42%'}
-      }
-      return {top: '57%'}
-    },
     linePercent() {
       const len = this.steps.length
       if (len > 2) return 100 / (len - 1)

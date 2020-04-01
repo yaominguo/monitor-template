@@ -30,6 +30,11 @@ export default {
   mounted() {
     this.inject().then(this.initMap)
   },
+  computed: {
+    sizeRate() {
+      return Math.floor(screen.height * 1.48 / 100 / 11)
+    },
+  },
   methods: {
     inject() {
       return new Promise((resolve, reject) => {
@@ -52,8 +57,8 @@ export default {
         url: this.mapUrl,
         onReady: () => {
           // console.log('地图创建完成')
-          this.$emit('complete')
           this.addListener()
+          this.$emit('complete')
         }
       })
     },
@@ -156,7 +161,7 @@ export default {
             symbolLayers: [
               {
                 type: 'icon',
-                size,
+                size: size * this.sizeRate,
                 resource: {
                   href: this.iconUrl + (item.icon || icon),
                 },
@@ -210,7 +215,7 @@ export default {
         datas: data.map(item => {
           return {
             name: labelKey ? item[labelKey] : null,
-            value: size,
+            value: size * this.sizeRate,
             corrd: [item.X || item.x, item.Y || item.y],
             color: color,
           }

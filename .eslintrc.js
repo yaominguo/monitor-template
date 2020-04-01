@@ -19,19 +19,13 @@ module.exports = {
   rules: {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": ["error", 2],
+    "key-spacing": [2, {"beforeColon": false, "afterColon": true}], // 冒号前不要空格，后需要空格
+    "comma-spacing": [2, {"before": false, "after": true}], // 逗号前不要空格，后需要空格
+    "arrow-spacing": [2, {"before": true, "after": true}], //箭头函数中的箭头前后需要留空格
     'linebreak-style': 'off',
-    "quotes": [
-      "error",
-      "single",
-    ],
-    "semi": [
-      "error",
-      "never",
-    ],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
     "no-console": 0,
   }
 }

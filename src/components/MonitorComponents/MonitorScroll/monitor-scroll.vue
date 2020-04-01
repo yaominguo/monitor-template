@@ -1,13 +1,11 @@
 <template>
   <div class="monitor-scroll" @mouseenter="clearTimer" @mouseleave="start">
-    <template v-if="length > 0">
-      <div ref="scrollContent">
-        <slot />
-      </div>
-      <div v-if="!isShort">
-        <slot />
-      </div>
-    </template>
+    <div ref="scrollContent">
+      <slot />
+    </div>
+    <div v-if="!isShort">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -43,7 +41,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.content = this.$refs.scrollContent
-      this.children = this.$refs.scrollContent.children
+      this.children = (this.content && this.content.children) || []
       this.start()
     })
   },
