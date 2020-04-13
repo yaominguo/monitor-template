@@ -3,7 +3,7 @@
     <div ref="scrollContent">
       <slot />
     </div>
-    <div v-if="!isShort">
+    <div v-if="!isShort" ref="subContent">
       <slot />
     </div>
   </div>
@@ -23,27 +23,24 @@ export default {
     },
     duration: {
       type: Number,
-      default: 3000,
+      default: 5000,
     },
     mode: {
       type: [Number, String],
       default: 1,
-    }
+    },
+    step: {
+      type: Number,
+    },
   },
   data() {
     return {
       timer: null,
-      index: -1,
-      children: [],
-      content: null,
+      index: 0,
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.content = this.$refs.scrollContent
-      this.children = (this.content && this.content.children) || []
-      this.start()
-    })
+    this.$nextTick(this.start)
   },
   beforeDestroy() {
     this.clearTimer()
@@ -67,10 +64,13 @@ export default {
       }
     },
     startMode1() {
-      let height = this.$refs.scrollContent.offsetHeight
+      const content = this.$refs.scrollContent
+      const subContent = this.$refs.subContent
+      let height = content.offsetHeight
+
       this.timer = setInterval(() => {
         if (height <= 0) {
-          height = this.$refs.scrollContent.offsetHeight
+          height = content.offsetHeight
           return
         }
         if (this.index < height) {
@@ -78,26 +78,44 @@ export default {
         } else {
           this.index = 0
         }
-        this.content.style.marginTop = -this.index + 'px'
-      }, 30)
+        content.style.transform = `translateY(${-this.index}px)`
+        subContent.style.transform = `translateY(${-this.index}px)`
+      }, 100)
     },
     startMode2() {
+      const content = this.$refs.scrollContent
+      const subContent = this.$refs.subContent
+      const len = this.$com.confirm(content, 'children.length', 0)
+
       this.timer = setInterval(() => {
-        if (this.index < this.length - 1) {
+        if (this.index < len) {
           this.index += 1
+          content.style.transition = 'transform 0.5s'
+          subContent.style.transition = 'transform 0.5s'
         } else {
-          this.index = -1
+          this.index = 0
+          content.style.transition = 'none'
+          subContent.style.transition = 'none'
         }
-        for(let i=0, len=this.children.length; i<len; i++) {
-          const child = this.children[i]
-          if (this.index >= i) {
-            child.classList.add('on')
-          } else {
-            child.classList.remove('on')
-          }
-        }
+        content.style.transform = `translateY(${-this.step * this.index}rem)`
+        subContent.style.transform = `translateY(${-this.step * this.index}rem)`
       }, this.duration)
     },
+  },
+  watch: {
+    length(cur) {
+      this.clearTimer()
+      this.index = 0
+      const content = this.$refs.scrollContent
+      const subContent = this.$refs.subContent
+      if (content) {
+        content.style.transform = 'translateY(0)'
+      }
+      if (subContent) {
+        subContent.style.transform = 'translateY(0)'
+      }
+      this.$nextTick(this.start)
+    }
   },
 }
 </script>
@@ -109,10 +127,4 @@ export default {
   overflow hidden
   box-sizing border-box
   z-index 10
-  .on
-    overflow hidden !important
-    transition all 0.6s !important
-    height 0 !important
-    padding 0 auto !important
-    margin 0 auto !important
 </style>
