@@ -164,6 +164,7 @@ length|数据长度|Number
 limit|临界点，大于此值则滚动，默认为6|Number
 duration|间隔时间，默认为3000|Number
 mode|默认为1，即向上滚动。2为不断将第一个元素高度置为0|[Number, String]
+step|mode2模式下必填，每次向上滚动的距离|Number
 
 ```html
 <m-scroll :length="10" mode="2">
