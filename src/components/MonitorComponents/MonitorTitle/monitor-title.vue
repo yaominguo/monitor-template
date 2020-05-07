@@ -1,6 +1,6 @@
 <template>
   <div class="monitor-title">
-    <span v-if="!hideDate" class="moment date" @mouseenter="returnopenDatePicker = true" @mouseleave="openDatePicker = false">
+    <span v-if="!hideDate" class="moment date" @mouseenter="openDatePicker = true" @mouseleave="openDatePicker = false">
       <DatePicker @on-change="handleDateChange" :value="curDate" :options="options" class="date-picker" :open="editable && openDatePicker" type="date">
         <span>{{curDate}}</span>
       </DatePicker>
