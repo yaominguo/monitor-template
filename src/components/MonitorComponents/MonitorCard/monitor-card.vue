@@ -46,6 +46,7 @@ $size()
   $blur()
   overflow hidden
   height initial
+  width initial
   /deep/ .card-wrapper
     $size()
     padding 0.5rem 1rem
