@@ -75,7 +75,7 @@ export default {
     },
   },
   methods: {
-    onReady(instance, countup) {
+    onReady(instance) {
       if (!this.autoUpdate) return
       setTimeout(() => {
         instance.reset()

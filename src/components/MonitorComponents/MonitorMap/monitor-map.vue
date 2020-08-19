@@ -1,11 +1,10 @@
 <template>
-  <iframe id="map" frameborder="0" scrolling="no" allowtransparency="true" />
+  <!-- <iframe id="map" frameborder="0" scrolling="no" allowtransparency="true" /> -->
+  <div id="map"></div>
 </template>
 
 <script>
-// import 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
-// import 'http://www.962121.net/gis_system/smimap/mapdebug/ShsmiGis.Bridge.js'
-
+import SMap from './esm/SMap'
 export default {
   name: 'MonitorMap',
   props: {
@@ -28,7 +27,14 @@ export default {
     }
   },
   mounted() {
-    this.inject().then(this.initMap)
+    // this.inject().then(this.initMap)
+    this.map = new SMap.Map('map', {
+      viewMode: '2D',
+      center: [0, 0],
+      zoom: 5,
+      zooms: [1, 12],
+      // mapStyle: 'smap://styles/dark'
+    })
   },
   computed: {
     sizeRate() {
@@ -37,7 +43,7 @@ export default {
   },
   methods: {
     inject() {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         if (document.getElementById('_mapjs')) {
           resolve()
           return
@@ -126,7 +132,7 @@ export default {
       const dataArray = []
       const uniqueValueInfos = []
       const fieldJsonArray = []
-      for (let e in data[0]) {
+      for (const e in data[0]) {
         fieldJsonArray.push({
           name: e,
           alias: e,
@@ -206,13 +212,10 @@ export default {
      */
     addGifPoint({name, data, labelKey, icon, size = 200, color = '#00FFFF'}) {
       if(!this.map) return
-      if (!Array.isArray(data)) {
-        data = [data]
-      }
       const params = {
         name: name,
         mode: 'add',
-        datas: data.map(item => {
+        datas: (Array.isArray(data) ? data : [data]).map(item => {
           return {
             name: labelKey ? item[labelKey] : null,
             value: size * this.sizeRate,

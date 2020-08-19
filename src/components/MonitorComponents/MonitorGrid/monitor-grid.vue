@@ -54,7 +54,7 @@ export default {
         'background-image': `url(${this.bgImg})`
       }
 
-      const children = this.$refs.grid.children
+      const {children} = this.$refs.grid
       for(let i = 0; i < children.length; i++) {
         const child = children[i]
         const area = child.getAttribute('area')

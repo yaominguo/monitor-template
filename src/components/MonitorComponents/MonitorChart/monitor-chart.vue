@@ -112,8 +112,8 @@ export default {
         const y1Max = Math.max.apply(null, y1)
         const y2Max = Math.max.apply(null, y2)
         options.yAxis = [
-          Object.assign({}, this.defaultOptions.yAxis, {min:0, max: y1Max, interval: y1Max / 5}),
-          Object.assign({}, this.defaultOptions.yAxis, {min:0, max: y2Max, interval: y2Max / 5}),
+          Object.assign({}, this.defaultOptions.yAxis, {min: 0, max: y1Max, interval: y1Max / 5}),
+          Object.assign({}, this.defaultOptions.yAxis, {min: 0, max: y2Max, interval: y2Max / 5}),
         ]
       } else {
         options.yAxis = Object.assign({}, this.defaultOptions.yAxis, yAxis)
@@ -239,9 +239,9 @@ export default {
             x2: 0,
             y2: 1,
             colorStops: [{
-                offset: 0, color: borderColor[0] // 0% 处的颜色
+              offset: 0, color: borderColor[0] // 0% 处的颜色
             }, {
-                offset: 1, color: borderColor[1] // 100% 处的颜色
+              offset: 1, color: borderColor[1] // 100% 处的颜色
             }],
             global: false, // 缺省为 false
           }

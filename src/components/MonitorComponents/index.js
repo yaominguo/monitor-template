@@ -17,7 +17,6 @@ const MonitorTitle = () => import('./MonitorTitle/monitor-title')
 const MonitorStep = () => import('./MonitorStep/monitor-step')
 const MonitorScroll = () => import('./MonitorScroll/monitor-scroll')
 
-
 export default (Vue) => {
   Vue.use(animate)
   Vue.component('m-animate', MonitorAnimate)

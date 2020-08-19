@@ -5,7 +5,7 @@ case 'production':
   break
 default:
   BASE_URL = 'default_url'
-};
+}
 export default {
   BASE_URL,
   TEST_URL: '/api/test_url',

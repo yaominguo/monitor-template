@@ -9,9 +9,9 @@
     columns="1fr 2fr 1fr"
     rows="4rem 1fr 1fr 1fr"
     gap="0.8rem"
-    :bgImg="require('@/assets/images/stars-bg.png')"
     style="paddingTop: 0"
   >
+    <m-map></m-map>
     <m-title area="title" hideDate hideTime :bgImg="require('@/assets/images/title-bg.png')">测试专题</m-title>
     <m-card area="box1" title="题目">
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia fugit dicta explicabo blanditiis dolorum ratione aliquid, consequuntur facere ex saepe consectetur! At, accusamus fuga placeat vero soluta facilis odio esse.

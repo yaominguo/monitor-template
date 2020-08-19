@@ -13,8 +13,7 @@ export default {
         accumulator[currentValue] :
         defaultValue
 
-    path = path.split('.')
-    return path.reduce(reducer, obj)
+    return path.split('.').reduce(reducer, obj)
   },
   /**
      *  -----  柯里化版本 （为了不再重复输入obj这个参数） -----
@@ -29,8 +28,7 @@ export default {
         (accumulator && accumulator[currentValue]) ?
           accumulator[currentValue] :
           defaultValue
-      path = path.split('.')
-      return path.reduce(reducer, obj)
+      return path.split('.').reduce(reducer, obj)
     }
   },
 }

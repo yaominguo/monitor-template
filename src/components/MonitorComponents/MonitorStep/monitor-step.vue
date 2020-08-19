@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted() {
-     this.$nextTick(() => {
+    this.$nextTick(() => {
       this.setTop = {top: `calc(${this.$refs.icon[0].offsetTop}px + 0.35rem)`}
     })
   },

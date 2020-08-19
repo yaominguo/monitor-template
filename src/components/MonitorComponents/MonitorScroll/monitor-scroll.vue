@@ -3,7 +3,7 @@
     <div ref="scrollContent">
       <slot />
     </div>
-    <div v-if="!isShort" ref="subContent">
+    <div v-if="!isShort && !isTooLong" ref="subContent">
       <slot />
     </div>
   </div>
@@ -48,6 +48,9 @@ export default {
   computed: {
     isShort() {
       return this.length <= this.limit
+    },
+    isTooLong() {
+      return this.length > 120
     }
   },
   methods: {
@@ -79,7 +82,7 @@ export default {
           this.index = 0
         }
         content.style.transform = `translateY(${-this.index}px)`
-        subContent.style.transform = `translateY(${-this.index}px)`
+        subContent ? subContent.style.transform = `translateY(${-this.index}px)` : null
       }, 100)
     },
     startMode2() {
@@ -91,14 +94,14 @@ export default {
         if (this.index < len) {
           this.index += 1
           content.style.transition = 'transform 0.5s'
-          subContent.style.transition = 'transform 0.5s'
+          subContent ? subContent.style.transition = 'transform 0.5s' : null
         } else {
           this.index = 0
           content.style.transition = 'none'
-          subContent.style.transition = 'none'
+          subContent ? subContent.style.transition = 'none' : null
         }
         content.style.transform = `translateY(${-this.step * this.index}rem)`
-        subContent.style.transform = `translateY(${-this.step * this.index}rem)`
+        subContent ? subContent.style.transform = `translateY(${-this.step * this.index}rem)` : null
       }, this.duration)
     },
   },
