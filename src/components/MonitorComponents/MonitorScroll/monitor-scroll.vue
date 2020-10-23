@@ -23,7 +23,7 @@ export default {
     },
     duration: {
       type: Number,
-      default: 5000,
+      default: 3000,
     },
     mode: {
       type: [Number, String],
@@ -67,8 +67,7 @@ export default {
       }
     },
     startMode1() {
-      const content = this.$refs.scrollContent
-      const subContent = this.$refs.subContent
+      const {scrollContent: content, subContent} = this.$refs
       let height = content.offsetHeight
 
       this.timer = setInterval(() => {
@@ -83,11 +82,10 @@ export default {
         }
         content.style.transform = `translateY(${-this.index}px)`
         subContent ? subContent.style.transform = `translateY(${-this.index}px)` : null
-      }, 100)
+      }, 50)
     },
     startMode2() {
-      const content = this.$refs.scrollContent
-      const subContent = this.$refs.subContent
+      const {scrollContent: content, subContent} = this.$refs
       const len = this.$com.confirm(content, 'children.length', 0)
 
       this.timer = setInterval(() => {
@@ -106,11 +104,10 @@ export default {
     },
   },
   watch: {
-    length(cur) {
+    length() {
       this.clearTimer()
       this.index = 0
-      const content = this.$refs.scrollContent
-      const subContent = this.$refs.subContent
+      const {scrollContent: content, subContent} = this.$refs
       if (content) {
         content.style.transform = 'translateY(0)'
       }
