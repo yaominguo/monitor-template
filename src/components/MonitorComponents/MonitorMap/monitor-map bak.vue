@@ -1,11 +1,10 @@
 <template>
-  <iframe id="map" frameborder="0" scrolling="no" allowtransparency="true" />
+  <!-- <iframe id="map" frameborder="0" scrolling="no" allowtransparency="true" /> -->
+  <div id="map"></div>
 </template>
 
 <script>
-// import 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'
-// import 'http://www.962121.net/gis_system/smimap/mapdebug/ShsmiGis.Bridge.js'
-
+import SMap from './esm/SMap'
 export default {
   name: 'MonitorMap',
   props: {
@@ -28,7 +27,14 @@ export default {
     }
   },
   mounted() {
-    this.inject().then(this.initMap)
+    // this.inject().then(this.initMap)
+    this.map = new SMap.Map('map', {
+      viewMode: '2D',
+      center: [0, 0],
+      zoom: 5,
+      zooms: [1, 12],
+      // mapStyle: 'smap://styles/dark'
+    })
   },
   computed: {
     sizeRate() {
