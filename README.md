@@ -2,9 +2,11 @@
 
 > A Vue.js project
 
+[查看组件文档](./src/components/MonitorComponents/README.md)
+
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
