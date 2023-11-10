@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "animate.css": "^3.7.2",
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "babel-polyfill": "^6.26.0",
     "countup.js": "^2.0.4",
     "echarts": "^4.4.0",
